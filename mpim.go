@@ -16,7 +16,7 @@ type mpimResponseFull struct {
 	NoOp          bool        `json:"no_op"`
 	AlreadyClosed bool        `json:"already_closed"`
 	AlreadyOpen   bool        `json:"already_open"`
-	Channel       mpimChannel `json:"channel"`
+	Channel       mpimChannel `json:"group"`
 	MpIMs         []MpIM      `json:"groups"`
 	History
 	SlackResponse
@@ -62,10 +62,10 @@ func (api *Client) OpenMpIMChannel(users []string) (bool, bool, string, error) {
 
 // OpenIMChannelContext opens a multiparty direct message.
 func (api *Client) OpenMpIMChannelContext(ctx context.Context, users []string) (bool, bool, string, error) {
-	usersJoin := strings.Join(users,",") // Comma separated lists of users.
+	usersJoin := strings.Join(users, ",") // Comma separated lists of users.
 	values := url.Values{
 		"token": {api.config.token},
-		"users":  {usersJoin},
+		"users": {usersJoin},
 	}
 	response, err := mpimRequest(ctx, "mpim.open", values, api.debug)
 	if err != nil {
